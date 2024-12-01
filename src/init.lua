@@ -22,7 +22,6 @@ local ReactRoblox = require(Root.Packages:WaitForChild("react-roblox"))
 local Create = React.createElement
 
 local Window = require(Components.Window)
-local Elements = Root.Elements
 
 local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 
