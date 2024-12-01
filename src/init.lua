@@ -17,20 +17,11 @@ local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 
 local Library = {
     Version = "Release v1",
+    Theme = "Default",
+    Loading = false,
 
-    OpenFrames = {},
-	Options = {},
-	Themes = ThemeFolder.Default,
-
-	Window = nil,
-	WindowFrame = nil,
-	Unloaded = false,
-
-	Theme = "Dark",
-	DialogOpen = false,
-	UseAcrylic = false,
-	Acrylic = false,
-	Transparency = true,
 	MinimizeKeybind = nil,
 	MinimizeKey = Enum.KeyCode.LeftControl,
 }
+
+print("ok")
