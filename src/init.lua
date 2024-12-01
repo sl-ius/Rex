@@ -31,7 +31,7 @@ Container.Parent = RunService:IsStudio() and LocalPlayer.PlayerGui or CoreGui
 
 ProtectGui(Container)
 
-local Render = ReactRoblox.createRoot(Container)
+local UIRoot = ReactRoblox.createRoot(Container)
 
 local Library = {
 	Window = nil,
@@ -82,7 +82,7 @@ function Library:NewWindow(Props)
 
     Library.Window = Window
 
-	return Window
+	UIRoot:render(Create(Window))
 end
 
 function Library:Destroy()
