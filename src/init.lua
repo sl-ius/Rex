@@ -1,11 +1,12 @@
 --[[
-    Rex UI Library by Sius - Release v1
-    ©2024 Rex Scripts. All rights reserved.
+    Rex - UI Library
+    By Sius
+
+    Inspired by: https://github.com/dawid-scripts/Fluent/tree/master
     Licensed by MIT.
 --]]
 
 local LocalPlayer = game:GetService("Players").LocalPlayer
-local Camera = game:GetService("Workspace").CurrentCamera
 local RunService = game:GetService("RunService")
 local Mouse = LocalPlayer:GetMouse()
 
@@ -24,4 +25,19 @@ local Library = {
 	MinimizeKey = Enum.KeyCode.LeftControl,
 }
 
-print("ok")
+local Elements = {}
+Elements.__index = Elements
+Elements.__namecall = function(Table, Key, ...)
+	return Elements[Key](...)
+end
+
+for _, ElementComponent in ipairs(ElementsTable) do
+	Elements["Add" .. ElementComponent.__type] = function(self, Idx, Config)
+		ElementComponent.Container = self.Container
+		ElementComponent.Type = self.Type
+		ElementComponent.ScrollFrame = self.ScrollFrame
+		ElementComponent.Library = Library
+
+		return ElementComponent:New(Idx, Config)
+	end
+end
