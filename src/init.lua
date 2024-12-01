@@ -6,23 +6,44 @@
     Licensed by MIT.
 --]]
 
-local LocalPlayer = game:GetService("Players").LocalPlayer
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = game:GetService("Players").LocalPlayer
+local CoreGui = game:GetService("CoreGui")
 local Mouse = LocalPlayer:GetMouse()
 
 local Root = script
-local ComponentFolder = Root.Components
-local ThemeFolder = Root.Themes
+local Elements = Root.Elements
+local Components = Root.Components
+
+local React = require(Root.Packages:WaitForChild("react"))
+local ReactRoblox = require(Root.Packages:WaitForChild("react-roblox"))
+
+local Create = React.createElement
+
+local Window = require(Components.Window)
+local Elements = Root.Elements
 
 local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 
-local Library = {
-    Version = "Release v1",
-    Theme = "Default",
-    Loading = false,
+local Container = Instance.new("Folder")
+Container.Parent = RunService:IsStudio() and LocalPlayer.PlayerGui or CoreGui
 
+ProtectGui(Container)
+
+local Render = ReactRoblox.createRoot(Container)
+
+local Library = {
+	Window = nil,
+	WindowFrame = nil,
+	Unloaded = false,
+
+	Theme = "Dark",
+	DialogOpen = false,
 	MinimizeKeybind = nil,
 	MinimizeKey = Enum.KeyCode.LeftControl,
+
+	Container = Container,
 }
 
 local Elements = {}
@@ -31,13 +52,42 @@ Elements.__namecall = function(Table, Key, ...)
 	return Elements[Key](...)
 end
 
-for _, ElementComponent in ipairs(ElementsTable) do
-	Elements["Add" .. ElementComponent.__type] = function(self, Idx, Config)
-		ElementComponent.Container = self.Container
-		ElementComponent.Type = self.Type
-		ElementComponent.ScrollFrame = self.ScrollFrame
-		ElementComponent.Library = Library
+--[[
+for _, Components in ipairs(Elements) do
+	Elements["New" .. Components.__type] = function(self, Idx, Config)
+		Components.Type = self.Type
+		Components.Library = Library
 
-		return ElementComponent:New(Idx, Config)
+		return Components:New(Idx, Config)
+	end
+end
+--]]
+
+function Library:NewWindow(Props)
+    assert(Props.Name, "Window Error - Missing Name")
+
+    if Library.Window then
+        warn("You cannot create more than one window")
+        return
+    end
+
+    Library.MinimizeKey = Props.MinimizeKey or Enum.KeyCode.LeftAlt
+    Library.Theme = Props.Theme or "Dark"
+
+    local Window = Create(Window, {
+        Parent = Container,
+		Size = Props.Size,
+		Name = Props.Name
+    })
+
+    Library.Window = Window
+
+	return Window
+end
+
+function Library:Destroy()
+	if Library.Window then
+		Library.Unloaded = true
+		Library.Container:Destroy()
 	end
 end
