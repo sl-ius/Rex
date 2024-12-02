@@ -13,7 +13,6 @@ local CoreGui = game:GetService("CoreGui")
 local Mouse = LocalPlayer:GetMouse()
 
 local Root = script
-local Elements = Root.Elements
 local Components = Root.Components
 
 local React = require(Root.Packages:WaitForChild("react"))
