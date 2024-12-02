@@ -45,12 +45,6 @@ local Library = {
 	Container = Container,
 }
 
-local Elements = {}
-Elements.__index = Elements
-Elements.__namecall = function(Table, Key, ...)
-	return Elements[Key](...)
-end
-
 --[[
 for _, Components in ipairs(Elements) do
 	Elements["New" .. Components.__type] = function(self, Idx, Config)
